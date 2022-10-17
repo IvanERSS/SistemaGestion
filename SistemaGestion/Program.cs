@@ -24,7 +24,7 @@ do
     switch (op)
     {
         case 1:
-            Console.WriteLine("Nombre de usuario a buscar: ");
+            Console.WriteLine("Nombre a buscar: ");
             parametro = Convert.ToString(Console.ReadLine());
             ADO.GetUsuarios(parametro); 
             break;

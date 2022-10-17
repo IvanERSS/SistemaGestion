@@ -73,20 +73,17 @@ namespace SistemaGestion.ADO
                 cmd.Parameters.Add(
                     new SqlParameter("nombre", System.Data.SqlDbType.VarChar) { Value = nombreParameter }
                     );
-                cmd.CommandText = "SELECT * FROM Usuario WHERE Nombre = @nombre";
+                cmd.CommandText = "SELECT * FROM Usuario WHERE Nombre = @nombre OR NombreUsuario = @nombre";
                 var reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-
                     usuario.ID = Convert.ToInt32(reader.GetValue(0));
                     usuario.Nombre = reader.GetValue(1).ToString();
                     usuario.Apellido = reader.GetValue(2).ToString();
                     usuario.NombreUsuario = reader.GetValue(3).ToString();
                     usuario.Contrasenia = reader.GetValue(4).ToString();
                     usuario.Mail = reader.GetValue(5).ToString();
-
-
                 }
 
                 Console.WriteLine("---- USUARIO ----- ");
@@ -126,7 +123,7 @@ namespace SistemaGestion.ADO
                         Producto AS p
                         INNER JOIN ProductoVendido pv ON p.Id = pv.IdProducto
 						INNER JOIN Usuario u ON u.Id = p.IdUsuario
-                    WHERE u.Nombre = @user
+                    WHERE u.Nombre = @user OR u.NombreUsuario = @user
                     ";
 
 
@@ -177,7 +174,7 @@ namespace SistemaGestion.ADO
                 SELECT
 	                v.id as id_venta,
                     v.Comentarios AS Comentarios,
-	                CONCAT(u.Nombre, ' ',u.Apellido) AS Uusario, 
+	                CONCAT(u.Nombre, ' ',u.Apellido) AS Usuario, 
 	                Descripciones AS Articulo, 
 	                PrecioVenta AS Precio, 
 	                pv.Stock AS Cantidad
