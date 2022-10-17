@@ -1,6 +1,6 @@
 ﻿namespace Tools
 {
-    public static class Class01
+    public static class Class1
     {
 
     }

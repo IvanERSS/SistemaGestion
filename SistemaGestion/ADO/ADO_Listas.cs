@@ -59,7 +59,6 @@ namespace SistemaGestion.ADO
             return listaProductos;
         }
 
-
         public static List<Usuario> GetUsuarios()
         {
             var listaUsuarios = new List<Usuario>();

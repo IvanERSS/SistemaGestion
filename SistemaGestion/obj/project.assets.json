@@ -146,6 +146,16 @@
             "rid": "win"
           }
         }
+      },
+      "Tools/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Tools.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Tools.dll": {}
+        }
       }
     }
   },
@@ -462,11 +472,17 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Tools/1.0.0": {
+      "type": "project",
+      "path": "../Tools/Tools.csproj",
+      "msbuildProject": "../Tools/Tools.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "System.Data.SqlClient >= 4.8.4"
+      "System.Data.SqlClient >= 4.8.4",
+      "Tools >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -495,7 +511,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Ivan\\Documents\\Documentos Cursos\\CoderHouse\\C#\\SistemaGestion\\Tools\\Tools.csproj": {
+              "projectPath": "D:\\Ivan\\Documents\\Documentos Cursos\\CoderHouse\\C#\\SistemaGestion\\Tools\\Tools.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

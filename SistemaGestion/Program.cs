@@ -13,7 +13,7 @@ do
         "3- Ver lista de productos vendidos por usuario\n" +
         "4- Iniciar sesion\n" +
         "5- Ver lista de...\n" +
-        "0- SALIR"
+        "0- SALIR" 
     );
 
     op = Convert.ToInt32(Console.ReadLine());
