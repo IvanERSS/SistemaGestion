@@ -20,3 +20,5 @@ D:\Ivan\Documents\Documentos Cursos\CoderHouse\C#\SistemaGestion\SistemaGestion\
 D:\Ivan\Documents\Documentos Cursos\CoderHouse\C#\SistemaGestion\SistemaGestion\obj\Debug\net6.0\SistemaGestion.pdb
 D:\Ivan\Documents\Documentos Cursos\CoderHouse\C#\SistemaGestion\SistemaGestion\obj\Debug\net6.0\SistemaGestion.genruntimeconfig.cache
 D:\Ivan\Documents\Documentos Cursos\CoderHouse\C#\SistemaGestion\SistemaGestion\obj\Debug\net6.0\ref\SistemaGestion.dll
+D:\Ivan\Documents\Documentos Cursos\CoderHouse\C#\SistemaGestion\SistemaGestion\bin\Debug\net6.0\Tools.dll
+D:\Ivan\Documents\Documentos Cursos\CoderHouse\C#\SistemaGestion\SistemaGestion\bin\Debug\net6.0\Tools.pdb

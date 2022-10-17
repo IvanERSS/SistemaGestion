@@ -114,7 +114,12 @@ namespace SistemaGestion.ADO
                 SqlCommand cmd = connection.CreateCommand();
                 cmd.CommandText = @"
                     SELECT
-                        pv.ID as ID, Descripciones AS Articulo, PrecioVenta AS Precio, pv.Stock AS Cantidad
+                        pv.ID as ID,
+						Descripciones AS Articulo, 
+						PrecioVenta AS Precio, 
+						pv.Stock AS Cantidad,
+						PrecioVenta*pv.Stock AS Total,
+						pv.IdVenta AS id_venta
                     FROM
                         Producto AS p
                         INNER JOIN ProductoVendido pv ON p.Id = pv.IdProducto
@@ -131,6 +136,8 @@ namespace SistemaGestion.ADO
                     pVendido.Articulo = reader.GetValue(1).ToString();
                     pVendido.Precio = Convert.ToDouble(reader.GetValue(2));
                     pVendido.Cantidad = Convert.ToInt32(reader.GetValue(3));
+                    pVendido.Total = Convert.ToInt32(reader.GetValue(4));
+                    pVendido.IDVenta = Convert.ToInt32(reader.GetValue(5));
 
                     ProductosVendidos.Add(pVendido);
 
@@ -139,10 +146,12 @@ namespace SistemaGestion.ADO
                 Console.WriteLine("---- PRODUCTOS VENDIDOS ----- ");
                 foreach (var pVendido in ProductosVendidos)
                 {
-                    Console.WriteLine("id = " + pVendido.ID);
-                    Console.WriteLine("Articulo = " + pVendido.Articulo);
-                    Console.WriteLine("Precio = " + pVendido.Precio);
-                    Console.WriteLine("Cantidad = " + pVendido.Cantidad);
+                    Console.WriteLine("id: " + pVendido.ID);
+                    Console.WriteLine("Articulo: " + pVendido.Articulo);
+                    Console.WriteLine("Precio: " + pVendido.Precio);
+                    Console.WriteLine("Cantidad: " + pVendido.Cantidad);
+                    Console.WriteLine("Total: " + pVendido.Total);
+                    Console.WriteLine("id_venta: " + pVendido.IDVenta);
                     Console.WriteLine("--------------");
 
                 }
