@@ -9,7 +9,7 @@ do
     Console.WriteLine(
         "------MENU------\n" +
         "1- Ver usuario\n" +
-        "2- Ver ventas por usuario\n" +
+        "2- Ver productos por id de usuario\n" +
         "3- Ver lista de productos vendidos por usuario\n" +
         "4- Iniciar sesion\n" +
         "5- Ver lista de...\n" +
