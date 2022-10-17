@@ -5,7 +5,7 @@ namespace SistemaGestion.ADO
 {
     static internal class ADO_Listas
     {
-        public static SqlConnection GetConncection()
+        private static SqlConnection GetConncection()
         {
             string connectionString = "Server=WORK-LAP-IERS\\SQLEXPRESS;Database=SistemaGestion;Trusted_Connection=True;";
             SqlConnection conn = new SqlConnection(connectionString);
@@ -59,28 +59,6 @@ namespace SistemaGestion.ADO
             return listaProductos;
         }
 
-
-        public static Producto GetProductos(string productParameter)
-        {
-            Producto producto = new Producto();
-            using (SqlConnection connection = GetConncection())
-            {
-                connection.Open();
-                SqlCommand comm = connection.CreateCommand();
-                comm.Parameters.Add(new SqlParameter("product", System.Data.SqlDbType.VarChar) { Value = productParameter });
-                comm.CommandText = "SELECT * FROM producto WHERE Descripciones = @product";
-
-                var reader = comm.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    Console.WriteLine(reader.GetValue(2));
-                }
-
-                connection.Close();
-            }
-            return null;
-        }
 
         public static List<Usuario> GetUsuarios()
         {
