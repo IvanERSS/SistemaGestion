@@ -15,6 +15,7 @@ namespace SistemaGestion.Repository
         public string Contrasenia { get; set; }
         public string Mail { get; set; }
 
+        public Usuario() { }
         public Usuario(int iD, string nombre, string apellido, string nombreUsuario, string contrasenia, string mail)
         {
             ID = iD;

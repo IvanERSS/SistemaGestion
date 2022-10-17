@@ -15,6 +15,8 @@ namespace SistemaGestion.Repository
         public int Stock { get; set; }
         public int IDUsuario { get; set; }
 
+        public Producto() { }
+
         public Producto(int iD, string descripciones, double costo, double precioVenta, int stock, int iDUsuario)
         {
             ID = iD;
@@ -25,11 +27,7 @@ namespace SistemaGestion.Repository
             IDUsuario = iDUsuario;
         }
 
-        public List<Producto> GetProductos()
-        {
-            Tools.Get
-            return null;
-        }
+
 
 
     }
