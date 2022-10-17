@@ -5,21 +5,24 @@ namespace SistemaGestion.ADO
 {
     static internal class ADO
     {
-        public static SqlConnection GetConncection()
+        private static SqlConnection GetConncection()
         {
             string connectionString = "Server=WORK-LAP-IERS\\SQLEXPRESS;Database=SistemaGestion;Trusted_Connection=True;";
             SqlConnection conn = new SqlConnection(connectionString);
             return conn;
         }
 
-        public static List<Producto> GetProductos()
+        public static List<Producto> GetProductos(string userIDParameter)
         {
             var listaProductos = new List<Producto>();
             using (SqlConnection connection = GetConncection())
             {
                 connection.Open();
                 SqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "SELECT * FROM producto";
+                cmd.Parameters.Add(
+                    new SqlParameter("id", System.Data.SqlDbType.Int) { Value = userIDParameter }
+                    );
+                cmd.CommandText = "SELECT * FROM producto WHERE idUsuario = @id";
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -59,20 +62,22 @@ namespace SistemaGestion.ADO
             return listaProductos;
         }
 
-        public static List<Usuario> GetUsuarios()
+        public static Usuario GetUsuarios(string nombreParameter)
         {
-            var listaUsuarios = new List<Usuario>();
+            Usuario usuario = new Usuario();
 
             using (SqlConnection connection = GetConncection())
             {
                 connection.Open();
                 SqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "SELECT * FROM usuario";
+                cmd.Parameters.Add(
+                    new SqlParameter("nombre", System.Data.SqlDbType.VarChar) { Value = nombreParameter }
+                    );
+                cmd.CommandText = "SELECT * FROM Usuario WHERE Nombre = @nombre";
                 var reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    var usuario = new Usuario();
 
                     usuario.ID = Convert.ToInt32(reader.GetValue(0));
                     usuario.Nombre = reader.GetValue(1).ToString();
@@ -81,30 +86,24 @@ namespace SistemaGestion.ADO
                     usuario.Contrasenia = reader.GetValue(4).ToString();
                     usuario.Mail = reader.GetValue(5).ToString();
 
-                    listaUsuarios.Add(usuario);
 
                 }
 
-                Console.WriteLine("---- USUARIOS ----- ");
-                foreach (var usuario in listaUsuarios)
-                {
-                    Console.WriteLine("id = " + usuario.ID);
-                    Console.WriteLine("Nombre = " + usuario.Nombre);
-                    Console.WriteLine("Apellido = " + usuario.Apellido);
-                    Console.WriteLine("Nombre de usuario = " + usuario.NombreUsuario);
-                    Console.WriteLine("Contrasenia = " + usuario.Contrasenia);
-                    Console.WriteLine("Mail = " + usuario.Mail);
-                    Console.WriteLine("--------------");
-
-                }
+                Console.WriteLine("---- USUARIO ----- ");
+                Console.WriteLine("id = " + usuario.ID);
+                Console.WriteLine("Nombre = " + usuario.Nombre);
+                Console.WriteLine("Apellido = " + usuario.Apellido);
+                Console.WriteLine("Nombre de usuario = " + usuario.NombreUsuario);
+                Console.WriteLine("Contrasenia = " + usuario.Contrasenia);
+                Console.WriteLine("Mail = " + usuario.Mail);
                 reader.Close();
                 connection.Close();
             }
 
-            return listaUsuarios;
+            return usuario;
         }
 
-        public static List<ProductoVendido> GetProductosVendidos()
+        public static List<ProductoVendido> GetProductosVendidos(string userParameter)
         {
             var ProductosVendidos = new List<ProductoVendido>();
 
@@ -112,12 +111,22 @@ namespace SistemaGestion.ADO
             {
                 connection.Open();
                 SqlCommand cmd = connection.CreateCommand();
+                cmd.Parameters.Add(
+                    new SqlParameter("user",System.Data.SqlDbType.VarChar) {Value = userParameter }
+                    );
                 cmd.CommandText = @"
                     SELECT
-                        pv.ID as ID, Descripciones AS Articulo, PrecioVenta AS Precio, pv.Stock AS Cantidad
+						pv.Id,
+						pv.IdVenta AS ID_Venta,
+						Descripciones AS Articulo,
+						PrecioVenta AS Precio,
+						pv.Stock AS Cantidad,
+						(PrecioVenta*pv.Stock) AS Total
                     FROM
                         Producto AS p
                         INNER JOIN ProductoVendido pv ON p.Id = pv.IdProducto
+						INNER JOIN Usuario u ON u.Id = p.IdUsuario
+                    WHERE u.Nombre = @user
                     ";
 
 
@@ -128,9 +137,11 @@ namespace SistemaGestion.ADO
                     var pVendido = new ProductoVendido();
 
                     pVendido.ID = Convert.ToInt32(reader.GetValue(0));
-                    pVendido.Articulo = reader.GetValue(1).ToString();
-                    pVendido.Precio = Convert.ToDouble(reader.GetValue(2));
-                    pVendido.Cantidad = Convert.ToInt32(reader.GetValue(3));
+                    pVendido.IDVenta = Convert.ToInt32(reader.GetValue(1));
+                    pVendido.Articulo = reader.GetValue(2).ToString();
+                    pVendido.Precio = Convert.ToDouble(reader.GetValue(3));
+                    pVendido.Cantidad = Convert.ToInt32(reader.GetValue(4));
+                    pVendido.Total = Convert.ToDouble(reader.GetValue(5));
 
                     ProductosVendidos.Add(pVendido);
 
@@ -139,10 +150,11 @@ namespace SistemaGestion.ADO
                 Console.WriteLine("---- PRODUCTOS VENDIDOS ----- ");
                 foreach (var pVendido in ProductosVendidos)
                 {
-                    Console.WriteLine("id = " + pVendido.ID);
+                    Console.WriteLine("id_venta = " + pVendido.IDVenta);
                     Console.WriteLine("Articulo = " + pVendido.Articulo);
-                    Console.WriteLine("Preicio = " + pVendido.Precio);
+                    Console.WriteLine("Precio = " + pVendido.Precio);
                     Console.WriteLine("Cantidad = " + pVendido.Cantidad);
+                    Console.WriteLine("Total = " + pVendido.Total);
                     Console.WriteLine("--------------");
 
                 }
@@ -202,6 +214,41 @@ namespace SistemaGestion.ADO
             }
 
             return Ventas;
+        }
+
+        public static bool Session(string userParameter, string passParameter)
+        {
+            using(SqlConnection connection = GetConncection())
+            {
+                connection.Open();
+                var cmd = connection.CreateCommand();
+                cmd.Parameters.Add(
+                    new SqlParameter("user",System.Data.SqlDbType.VarChar) { Value = userParameter }
+                    );
+                cmd.Parameters.Add(
+                    new SqlParameter("pass",System.Data.SqlDbType.VarChar) { Value = passParameter }
+                    );
+
+                cmd.CommandText = @"
+                SELECT
+	                *
+                FROM
+	                Usuario
+				WHERE
+					NombreUsuario = @user AND
+					Contraseña = @pass
+                ";
+
+                var reader = cmd.ExecuteReader();
+
+                if (reader.Read()) { return true; } 
+                else { return false; }
+                
+                reader.Close();
+                connection.Close();
+            }
+
+            return false;
         }
 
     }
