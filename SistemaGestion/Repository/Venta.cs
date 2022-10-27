@@ -12,7 +12,6 @@ namespace SistemaGestion.Repository
         public string Comentarios { get; set; }
         public Usuario Usuario { get; set; }
         public List<ProductoVendido> Productos { get; set; }
-
         public Venta() { }
 
         public Venta(int iD, string comentarios, Usuario usuario, List<ProductoVendido> productos)
